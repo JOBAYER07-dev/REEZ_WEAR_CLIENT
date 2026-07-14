@@ -73,7 +73,7 @@ export default function Navbar() {
               </Link>
               {isAdmin && (
                 <Link
-                  href="/items/manage"
+                  href="/dashboard/items/manage"
                   className="hover:text-[var(--color-accent)] transition-colors"
                 >
                   Manage Items

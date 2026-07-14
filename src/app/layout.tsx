@@ -4,6 +4,8 @@ import './globals.css';
 import { Toaster } from 'sonner';
 import CustomCursor from '@/components/CustomCursor';
 import SmoothScrollProvider from '@/components/SmoothScrollProvider';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -33,7 +35,11 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <CustomCursor />
         <Toaster position="top-center" richColors />
-        <SmoothScrollProvider>{children}</SmoothScrollProvider>
+        <SmoothScrollProvider>
+          <Navbar />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </SmoothScrollProvider>
       </body>
     </html>
   );
