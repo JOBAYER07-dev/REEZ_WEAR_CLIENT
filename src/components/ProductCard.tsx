@@ -5,7 +5,6 @@ import type { Product } from '@/types/product';
 export default function ProductCard({ product }: { product: Product }) {
   return (
     <div className="bg-white border border-black/5 rounded-2xl overflow-hidden flex flex-col h-full hover:shadow-md hover:border-black/10 transition-all duration-300 group">
-      {/* 🎯 Image Container: aspect-square করে লম্বা ভাব কমানো হয়েছে */}
       <div className="relative aspect-square w-full bg-[#F1F0EB] overflow-hidden">
         <img
           src={product.image}
