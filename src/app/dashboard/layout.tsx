@@ -53,6 +53,12 @@ export default function DashboardLayout({
       adminOnly: true,
     },
     {
+      href: '/items/orders',
+      label: 'Manage Orders',
+      icon: ListOrdered,
+      adminOnly: true,
+    },
+    {
       href: '/dashboard/profile',
       label: 'Profile',
       icon: User,
