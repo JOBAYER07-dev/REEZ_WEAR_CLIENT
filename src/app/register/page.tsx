@@ -25,12 +25,12 @@ export default function RegisterPage() {
     }
 
     if (password.length < 8) {
-      setError('Password kমপক্ষে 8 character হতে হবে');
+      setError('Password kom-pakkhe 8 character hote hobe');
       return;
     }
 
     if (password !== confirmPassword) {
-      setError('Password mile নাই');
+      setError('Password mile nai');
       return;
     }
 
@@ -49,13 +49,15 @@ export default function RegisterPage() {
     }
 
     toast.success('Account created successfully!');
-    router.push('/');
+    // 🎯 অ্যাকাউন্ট খোলার পর সেশন কুকি রিড করার জন্য হোম পেজে ফুল রিফ্রেশ করা হলো
+    window.location.href = '/';
   };
 
   const handleGoogleSignup = async () => {
     await authClient.signIn.social({
       provider: 'google',
-      callbackURL: `${process.env.NEXT_PUBLIC_CLIENT_URL}/`,
+      // 🎯 env variable এর ক্যাশিং ইস্যু এড়াতে সরাসরি লাইভ লিংক বসানো হলো
+      callbackURL: 'https://reez-wear.vercel.app/',
     });
   };
 
@@ -111,7 +113,7 @@ export default function RegisterPage() {
                 type="password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                placeholder="Kমপক্ষে 8 character"
+                placeholder="Kom-pakkhe 8 character"
                 className="w-full border border-black/10 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-[var(--color-accent)]"
               />
             </div>

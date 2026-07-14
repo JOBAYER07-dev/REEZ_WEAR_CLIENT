@@ -18,7 +18,7 @@ export default function LoginPage() {
     setError('');
 
     if (!email || !password) {
-      setError('Email ar password diতে হবে');
+      setError('Email ar password dite hobe');
       return;
     }
 
@@ -36,7 +36,8 @@ export default function LoginPage() {
     }
 
     toast.success('Login successful!');
-    router.push('/');
+    // 🎯 ক্রস-ডোমেইন কুকি রেন্ডার হওয়ার পর ন্যাভবার আপডেট করতে ফুল রিফ্রেশ বাধ্যতামূলক
+    window.location.href = '/';
   };
 
   const handleDemoLogin = () => {
@@ -47,7 +48,8 @@ export default function LoginPage() {
   const handleGoogleLogin = async () => {
     await authClient.signIn.social({
       provider: 'google',
-      callbackURL: `${process.env.NEXT_PUBLIC_CLIENT_URL}/`,
+      // 🎯 env variable এর ক্যাশিং ইস্যু এড়াতে সরাসরি লাইভ লিংক বসানো হলো
+      callbackURL: 'https://reez-wear.vercel.app/',
     });
   };
 
