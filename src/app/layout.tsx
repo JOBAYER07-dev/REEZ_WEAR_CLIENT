@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { CartProvider } from '@/context/CartContext';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { Toaster } from 'sonner';
@@ -35,11 +36,14 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <CustomCursor />
         <Toaster position="top-center" richColors />
-        <SmoothScrollProvider>
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </SmoothScrollProvider>
+        <CartProvider>
+          {' '}
+          <SmoothScrollProvider>
+            <Navbar />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </SmoothScrollProvider>
+        </CartProvider>
       </body>
     </html>
   );

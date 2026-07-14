@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { toast } from 'sonner';
-import { Eye, Trash2 } from 'lucide-react';
+import { Eye, Trash2, ArrowLeft, Edit } from 'lucide-react';
 import { authClient } from '@/app/lib/auth-client';
 import type { Product } from '@/types/product';
 
@@ -73,7 +73,17 @@ export default function ManageItemsPage() {
   }
 
   return (
-    <div>
+    <div className="max-w-7xl mx-auto px-6 lg:px-10 py-10">
+      {/* ⬅5 Simple Back Arrow to Dashboard */}
+      <Link
+        href="/dashboard"
+        data-cursor-hover
+        className="inline-flex items-center gap-2 text-sm text-[var(--color-neutral)] hover:text-black mb-6 transition-colors font-medium"
+      >
+        <ArrowLeft size={16} />
+        Back to Dashboard
+      </Link>
+
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-serif italic mb-1">Manage Products</h1>
@@ -82,7 +92,7 @@ export default function ManageItemsPage() {
           </p>
         </div>
         <Link
-          href="/dashboard/items/add"
+          href="/items/add"
           data-cursor-hover
           className="bg-[var(--color-text)] text-white rounded-full px-5 py-2.5 text-sm font-medium hover:bg-[var(--color-accent)] hover:text-black transition-colors"
         >
@@ -152,6 +162,14 @@ export default function ManageItemsPage() {
                 >
                   <Eye size={14} />
                   View
+                </Link>
+                <Link
+                  href={`/items/edit/${product.id}`}
+                  data-cursor-hover
+                  className="flex items-center gap-1 text-xs font-medium text-blue-500 hover:text-blue-700 transition-colors"
+                >
+                  <Edit size={14} />
+                  Edit
                 </Link>
                 <button
                   onClick={() => handleDelete(product.id)}

@@ -41,13 +41,13 @@ export default function DashboardLayout({
       adminOnly: false,
     },
     {
-      href: '/dashboard/items/add',
+      href: '/items/add',
       label: 'Add Item',
       icon: PlusCircle,
       adminOnly: true,
     },
     {
-      href: '/dashboard/items/manage',
+      href: '/items/manage',
       label: 'Manage Items',
       icon: ListOrdered,
       adminOnly: true,

@@ -90,7 +90,7 @@ export default function ProfilePage() {
               className="w-full border border-black/10 rounded-lg px-4 py-2.5 text-sm bg-[var(--color-bg)] text-[var(--color-neutral)] cursor-not-allowed"
             />
             <p className="text-xs text-[var(--color-neutral)] mt-1">
-              Email change kora jাবে না
+              Email address cannot be changed.
             </p>
           </div>
 

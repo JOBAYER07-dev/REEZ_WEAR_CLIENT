@@ -6,24 +6,24 @@ import Link from 'next/link';
 
 const faqs = [
   {
-    question: 'Delivery koto din somoy lage?',
+    question: 'How long does delivery take?',
     answer:
-      'Dhaka-er vitor 24-48 ghontar moddhe ar Dhaka-er baire shara Bangladesh e 2-3 kormo dibosh somoy lage।',
+      'Delivery within Dhaka takes 24-48 hours, and for areas outside Dhaka, it takes 2-3 days.',
   },
   {
-    question: 'Size na milleo exchange kora jabe?',
+    question: 'Can I exchange a product if I receive the wrong size?',
     answer:
-      'Ha, order paware 7 diner moddhe free exchange kora jay, product unused ar original tag soho thakte hobe।',
+      'Yes, you can exchange a product for the correct size within 7 days of receiving your order, provided the product is unused and has its original tag attached.',
   },
   {
-    question: 'Payment kivabe korবো?',
+    question: 'How can I pay for my order?',
     answer:
-      'Cash on Delivery, bKash, Nagad ar card payment — shob option available checkout page e।',
+      'You can pay for your order using various methods including credit/debit cards, mobile banking, and cash on delivery (COD) where available.',
   },
   {
-    question: 'Product original ki na kivabe bujbo?',
+    question: 'Are the products authentic?',
     answer:
-      'REEZ-er shob product in-house quality check kore packaging হয়, ar order confirm er por invoice soho pathano hoy authenticity proof hishebe।',
+      'Yes, we guarantee that all products sold on our platform are 100% authentic and sourced directly from authorized distributors and brands.',
   },
 ];
 
@@ -39,8 +39,13 @@ export default function FaqSection() {
             Frequently Asked Questions
           </h2>
           <p className="text-sm text-[var(--color-neutral)] leading-relaxed">
-            Ar kono proshno thakle amader shathe jogajog koro, amra shobshomoy
-            help korte ready।
+            Have a question that&apos;s not answered here?{' '}
+            <Link
+              href="/contact"
+              className="text-[var(--color-accent)] hover:underline"
+            >
+              Contact us
+            </Link>
           </p>
 
           <Link

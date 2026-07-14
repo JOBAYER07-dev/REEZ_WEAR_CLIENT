@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
+import { useCart } from '@/context/CartContext'; // 🎯 কার্ট হুক ইম্পোর্ট করা হয়েছে
 import Link from 'next/link';
 import { Star, ShoppingCart, Heart, Tag } from 'lucide-react';
 import ProductCard from '@/components/ProductCard';
@@ -11,6 +12,7 @@ import type { Product } from '@/types/product';
 export default function ProductDetailsPage() {
   const params = useParams();
   const id = params.id as string;
+  const { addToCart } = useCart(); // 🎯 কার্ট অ্যাড ফাংশন কল করা হয়েছে
 
   const [product, setProduct] = useState<Product | null>(null);
   const [related, setRelated] = useState<Product[]>([]);
@@ -83,10 +85,10 @@ export default function ProductDetailsPage() {
     return (
       <div className="max-w-7xl mx-auto px-6 lg:px-10 py-24 text-center">
         <h1 className="text-2xl font-semibold mb-3">
-          Product khুঁজে pাওয়া যায়নি
+          Product খুঁজে পাওয়া যায়নি
         </h1>
         <p className="text-[var(--color-neutral)] mb-6">
-          Ei product ta হয়tো mucheদেওয়া হয়েছে, ba link ta ভুল।
+          Ei product ta হয়তো mucheদেওয়া হয়েছে, ba link ta ভুল।
         </p>
         <Link
           href="/shop"
@@ -100,7 +102,7 @@ export default function ProductDetailsPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-6 lg:px-10 py-10">
+    <div className="max-w-7xl mx-auto px-6 lg:px-10 py-12">
       {/* Breadcrumb */}
       <div className="text-sm text-[var(--color-neutral)] mb-8">
         <Link href="/" className="hover:text-black">
@@ -155,7 +157,9 @@ export default function ProductDetailsPage() {
           </p>
 
           <div className="flex items-center gap-3 mb-8">
+            {/* 🎯 onClick ইভেন্টেaddToCart যুক্ত করা হয়েছে */}
             <button
+              onClick={() => addToCart(product)}
               data-cursor-hover
               className="flex-1 flex items-center justify-center gap-2 bg-[var(--color-text)] text-white rounded-full py-3.5 text-sm font-medium hover:bg-[var(--color-accent)] hover:text-black transition-colors"
             >
@@ -223,8 +227,9 @@ export default function ProductDetailsPage() {
             </div>
           </div>
           <div className="flex-1 text-sm text-[var(--color-neutral)]">
-            Ei product-er overall rating {product.rating.toFixed(1)} out of 5,
-            verified customer purchase-er ভিত্তিতে।
+            {' '}
+            This product has a rating of {product.rating.toFixed(1)} out of 5,
+            based on verified customer purchases.
           </div>
         </div>
       </div>

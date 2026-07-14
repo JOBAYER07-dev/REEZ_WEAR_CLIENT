@@ -1,35 +1,31 @@
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import { Target, Users, Leaf, Award } from 'lucide-react';
 
 const values = [
   {
     icon: Target,
     title: 'Our Mission',
-    desc: 'Bangladesh-er tarunder jonno affordable price-e premium quality streetwear pouche deya, jekhane fashion ar comfort ekshathe pawa jay.',
+    desc: 'To provide affordable premium quality streetwear for Bangladesh\'s youth, where fashion and comfort coexist.',
   },
   {
     icon: Leaf,
     title: 'Quality First',
-    desc: 'Prottek fabric hand-selected, prottek stitch quality-checked — amra compromise kori na product quality e.',
+    desc: 'We source the best quality fabrics from local markets and ensure that every product is crafted with care, so you can enjoy long lasting comfort and style.',
   },
   {
     icon: Users,
     title: 'Customer Centric',
-    desc: '4.7K+ follower ar growing customer base amader kache proman je real feedback shune amra design ar service improve kori.',
+    desc: 'With 4.7k+ followers and growing customer base, we\'ve proven that listening to real customer feedback helps us continuously improve both our designs and our service.',
   },
   {
     icon: Award,
     title: 'Authentic Design',
-    desc: 'Kono copy-paste design na — REEZ-er prottek collection original concept theke toiri, local trend bujhe.',
+    desc: 'No copy-paste designs every REEZ collection is created from original concepts, inspired by local trends and designed with authenticity in mind.',
   },
 ];
 
 export default function AboutPage() {
   return (
     <>
-      <Navbar />
-
       {/* Hero */}
       <section className="max-w-7xl mx-auto px-6 lg:px-10 pt-16 pb-12">
         <p className="text-sm font-medium text-[var(--color-neutral)] uppercase tracking-wider mb-3">
@@ -39,9 +35,9 @@ export default function AboutPage() {
           Wear Your Vibe, Own Your Style
         </h1>
         <p className="text-base text-[var(--color-neutral)] mt-6 max-w-xl leading-relaxed">
-          REEZ shuru hoyeche ekটা shimple idea theke — Bangladesh-er young
-          generation-er jonno emon clothing brand toiri kora jা quality-te
-          compromise kore na, kিন্তু price-e sobar nagaler moddhe thake।
+          REEZ was born from a simple idea to create a clothing brand for
+          Bangladesh's young generation that never compromises on quality while
+          keeping its prices affordable for everyone.
         </p>
       </section>
 
@@ -60,15 +56,16 @@ export default function AboutPage() {
               Our Story
             </h2>
             <p className="text-sm text-[var(--color-neutral)] leading-relaxed">
-              Ekটা choto Facebook page theke shuru kore aaj REEZ ekটা growing
-              community-r brand hoye uthেছে। Amra shuru theke bishash kori,
-              fashion mane shudhu porar jinis na — eta ekটা identity, statement.
+              What started as a small Facebook page has grown into REEZ, a
+              thriving community-driven brand. From the very beginning, we've
+              believed that fashion is more than just clothing it's an identity,
+              a statement.
             </p>
             <p className="text-sm text-[var(--color-neutral)] leading-relaxed">
-              Prottek collection design korার age amra amader customer der
-              feedback shuni, current trend follow kori, ar local fabric market
-              theke best quality material khunje ber kori — jate final product
-              ta shobar jonno worth-it hoy।
+              Before designing every collection, we listen to our customers'
+              feedback, follow current trends, and source the best quality
+              materials from local fabric markets so the final product is truly
+              worth it for everyone.
             </p>
           </div>
         </div>
@@ -99,8 +96,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
-      <Footer />
     </>
   );
 }

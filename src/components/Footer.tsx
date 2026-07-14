@@ -16,7 +16,7 @@ export default function Footer() {
           <div>
             <h3 className="text-2xl font-semibold mb-3">REEZ</h3>
             <p className="text-sm text-white/60 leading-relaxed">
-              Wear Your Vibe — modern men&apos;s fashion, crafted for everyday
+              Wear Your Vibe modern men&apos;s fashion, crafted for everyday
               style o comfort.
             </p>
             <div className="flex items-center gap-3 mt-5">
@@ -126,15 +126,15 @@ export default function Footer() {
             <ul className="flex flex-col gap-3 text-sm text-white/60">
               <li className="flex items-start gap-2.5">
                 <MapPin size={16} className="shrink-0 mt-0.5" />
-                <span>Lalmohon, Bhola, Bangladesh</span>
+                <span>Mogbazar, Dhaka, Bangladesh</span>
               </li>
               <li className="flex items-center gap-2.5">
                 <Phone size={16} className="shrink-0" />
                 <a
-                  href="tel:+8801700000000"
+                  href="tel:+8801861961550"
                   className="hover:text-[var(--color-accent)] transition-colors"
                 >
-                  +880 1700-000000
+                  +8801861961550
                 </a>
               </li>
               <li className="flex items-center gap-2.5">
@@ -143,7 +143,7 @@ export default function Footer() {
                   href="mailto:support@reez.com"
                   className="hover:text-[var(--color-accent)] transition-colors"
                 >
-                  support@reez.com
+                  reezz.bd@gmail.com
                 </a>
               </li>
             </ul>

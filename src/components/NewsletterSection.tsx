@@ -27,14 +27,13 @@ export default function NewsletterSection() {
           Get 10% Off Your First Order
         </h2>
         <p className="text-sm text-white/60 max-w-md">
-          Notun collection ar exclusive offer shobar age jante subscribe koro
-          amader newsletter e।
+          Subscribe to our newsletter and receive a 10% discount code for your first order. Stay updated with our latest products and offers.
         </p>
 
         {submitted ? (
           <div className="flex items-center gap-2 text-[var(--color-accent)] font-medium text-sm mt-2">
             <CheckCircle2 size={18} />
-            Subscribe kora hoyeche! Discount code email e check koro.
+            Thank you for subscribing! Check your inbox for the discount code.
           </div>
         ) : (
           <form

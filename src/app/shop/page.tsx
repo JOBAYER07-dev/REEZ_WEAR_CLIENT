@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Search, SlidersHorizontal } from 'lucide-react';
 import ProductCard from '@/components/ProductCard';
 import ProductCardSkeleton from '@/components/ProductCardSkeleton';
@@ -18,23 +19,28 @@ const categories = [
   { name: 'Bags', slug: 'bags' },
 ];
 
-export default function ShopPage() {
+function ShopContent() {
+  const searchParams = useSearchParams();
+  
+  // 🎯 হোমপেজ বা অন্য পেজ থেকে ইউআরএল-এ আসা ফিল্টার রিড করা
+  const initialCategory = searchParams.get('category') || 'all';
+  const initialSearch = searchParams.get('search') || '';
+
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState('');
-  const [category, setCategory] = useState('all');
+  const [search, setSearch] = useState(initialSearch);
+  const [category, setCategory] = useState(initialCategory);
   const [sort, setSort] = useState('newest');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
   const [showFilters, setShowFilters] = useState(false);
-
+  
   const limit = 8;
 
   useEffect(() => {
     let ignore = false;
-
     async function fetchProducts() {
       setLoading(true);
       try {
@@ -43,57 +49,49 @@ export default function ShopPage() {
           limit: String(limit),
           sort,
         });
+
         if (category !== 'all') params.set('category', category);
         if (search) params.set('search', search);
+
+        // 🎯 ব্যাকএন্ড এপিআই-তে প্রাইস ফিল্টার পাঠানো হচ্ছে
+        if (minPrice) params.set('minPrice', minPrice);
+        if (maxPrice) params.set('maxPrice', maxPrice);
 
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/api/products?${params.toString()}`,
         );
         const data = await res.json();
 
-        let filtered: Product[] = data.products;
-        if (minPrice) {
-          filtered = filtered.filter(
-            (p: Product) => p.price >= Number(minPrice),
-          );
-        }
-        if (maxPrice) {
-          filtered = filtered.filter(
-            (p: Product) => p.price <= Number(maxPrice),
-          );
-        }
-
         if (!ignore) {
-          setProducts(filtered);
+          setProducts(data.products);
           setTotalPages(Math.max(1, Math.ceil(data.total / limit)));
         }
       } catch (error) {
         console.error('Failed to fetch products:', error);
+        // লাইন ৭১ পরিবর্তন করে এটি করো:
       } finally {
         if (!ignore) setLoading(false);
       }
     }
-
+    
     fetchProducts();
-
+    
     return () => {
       ignore = true;
     };
   }, [page, sort, category, search, minPrice, maxPrice]);
 
   const handleFilterChange = () => {
-    setPage(1);
+    setPage(1); // ফিল্টার চেঞ্জ হলে সবসময় ১ম পেজে ফেরত নিয়ে যাবে
   };
 
   return (
     <div className="max-w-7xl mx-auto px-6 lg:px-10 py-10">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl md:text-4xl font-serif italic mb-2">
-          Explore Products
-        </h1>
+        <h1 className="text-3xl md:text-4xl font-serif italic mb-2">Explore Products</h1>
         <p className="text-[var(--color-neutral)] text-sm">
-         search and filter through our wide range of products to find exactly what you need.
+          Search and filter through our wide range of products to find exactly what you need.
         </p>
       </div>
 
@@ -140,7 +138,7 @@ export default function ShopPage() {
                     data-cursor-hover
                     className={`text-left text-sm px-3 py-2 rounded-lg transition-colors ${
                       category === c.slug
-                        ? 'bg-[var(--color-accent)] font-medium'
+                        ? 'bg-[var(--color-accent)] font-medium text-black'
                         : 'hover:bg-[var(--color-bg)] text-[var(--color-neutral)]'
                     }`}
                   >
@@ -152,7 +150,7 @@ export default function ShopPage() {
 
             {/* Price Filter */}
             <div className="mb-6">
-              <h3 className="text-sm font-semibold mb-3">Price Range (৳)</h3>
+              <h3 className="text-sm font-semibold mb-3">Price Range</h3>
               <div className="flex items-center gap-2">
                 <input
                   type="number"
@@ -162,7 +160,7 @@ export default function ShopPage() {
                     setMinPrice(e.target.value);
                     handleFilterChange();
                   }}
-                  className="w-full border border-black/10 rounded-lg px-3 py-2 text-sm outline-none focus:border-[var(--color-accent)]"
+                  className="w-full border border-black/10 rounded-lg px-3 py-2 text-sm outline-none focus:border-[var(--color-accent)] bg-[var(--color-bg)]/35"
                 />
                 <span className="text-[var(--color-neutral)]">-</span>
                 <input
@@ -173,7 +171,7 @@ export default function ShopPage() {
                     setMaxPrice(e.target.value);
                     handleFilterChange();
                   }}
-                  className="w-full border border-black/10 rounded-lg px-3 py-2 text-sm outline-none focus:border-[var(--color-accent)]"
+                  className="w-full border border-black/10 rounded-lg px-3 py-2 text-sm outline-none focus:border-[var(--color-accent)] bg-[var(--color-bg)]/35"
                 />
               </div>
             </div>
@@ -206,7 +204,7 @@ export default function ShopPage() {
               ))
             ) : products.length === 0 ? (
               <p className="col-span-full text-center text-[var(--color-neutral)] py-16">
-                there are no products matching your filters. Please adjust your search or filters and try again.
+                There are no products matching your filters. Please adjust your criteria and try again.
               </p>
             ) : (
               products.map(product => (
@@ -242,5 +240,14 @@ export default function ShopPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// 🎯 Next.js App Router এর নিয়ম মেনে Suspense দিয়ে র্যাপ করা হলো
+export default function ShopPage() {
+  return (
+    <Suspense fallback={<div className="text-center py-20 text-sm text-[var(--color-neutral)]">Loading Shop Content...</div>}>
+      <ShopContent />
+    </Suspense>
   );
 }
