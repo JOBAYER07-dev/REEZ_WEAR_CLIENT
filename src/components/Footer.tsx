@@ -2,9 +2,13 @@ import Link from 'next/link';
 import { Mail, Phone, MapPin } from 'lucide-react';
 
 const socialLinks = [
-  { name: 'Facebook', href: 'https://facebook.com', letter: 'f' },
-  { name: 'Instagram', href: 'https://instagram.com', letter: 'i' },
-  { name: 'Twitter', href: 'https://twitter.com', letter: 'x' },
+  { name: 'Facebook', href: 'https://www.facebook.com/reezzbd29', letter: 'f' },
+  {
+    name: 'Instagram',
+    href: 'https://www.instagram.com/reez_wear/',
+    letter: 'i',
+  },
+  { name: 'TikTok', href: 'https://www.tiktok.com/@reez6157', letter: 't' },
 ];
 
 export default function Footer() {
