@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
+import { Toaster } from 'sonner';
 import CustomCursor from '@/components/CustomCursor';
 import SmoothScrollProvider from '@/components/SmoothScrollProvider';
 
@@ -31,6 +32,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <CustomCursor />
+        <Toaster position="top-center" richColors />
         <SmoothScrollProvider>{children}</SmoothScrollProvider>
       </body>
     </html>
