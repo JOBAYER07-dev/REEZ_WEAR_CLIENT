@@ -3,7 +3,14 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { LayoutDashboard, PlusCircle, ListOrdered, User } from 'lucide-react';
+import {
+  LayoutDashboard,
+  PlusCircle,
+  ListOrdered,
+  User,
+  ClipboardList,
+  Package,
+} from 'lucide-react';
 import { authClient } from '@/app/lib/auth-client';
 
 export default function DashboardLayout({
@@ -41,6 +48,13 @@ export default function DashboardLayout({
       adminOnly: false,
     },
     {
+      // 🎯 কাস্টমারের নিজের অর্ডার ট্র্যাকিং করার লিংক
+      href: '/dashboard/orders',
+      label: 'My Orders',
+      icon: Package, // (Package আইকনটি ওপরে import করে নিও)
+      adminOnly: false, // সাধারণ ইউজার এবং অ্যাডমিন দুজনেই দেখতে পারবে
+    },
+    {
       href: '/items/add',
       label: 'Add Item',
       icon: PlusCircle,
@@ -55,7 +69,7 @@ export default function DashboardLayout({
     {
       href: '/items/orders',
       label: 'Manage Orders',
-      icon: ListOrdered,
+      icon: ClipboardList,
       adminOnly: true,
     },
     {
