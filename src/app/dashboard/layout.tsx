@@ -10,6 +10,7 @@ import {
   User,
   ClipboardList,
   Package,
+  Users,
 } from 'lucide-react';
 import { authClient } from '@/app/lib/auth-client';
 
@@ -69,6 +70,12 @@ export default function DashboardLayout({
       href: '/items/orders',
       label: 'Manage Orders',
       icon: ClipboardList,
+      adminOnly: true,
+    },
+    {
+      href: '/items/users',
+      label: 'Manage Users',
+      icon: Users,
       adminOnly: true,
     },
     {

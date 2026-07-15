@@ -24,6 +24,7 @@ export default function ManageItemsPage() {
         setProducts(data.products);
       } catch (error) {
         console.error('Failed to fetch products:', error);
+        toast.error('Failed to fetch products. Please try again later.');
       } finally {
         setLoading(false);
       }
