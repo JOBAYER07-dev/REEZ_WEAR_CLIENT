@@ -10,6 +10,7 @@ import {
   User as UserIcon,
   Calendar,
   Loader2,
+  AlertCircle,
 } from 'lucide-react';
 import { authClient } from '@/app/lib/auth-client';
 
@@ -27,6 +28,14 @@ export default function ManageUsersPage() {
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
 
+  // Custom role change modal state triggers with valid state assignment syntax
+  const [roleModalOpen, setRoleModalOpen] = useState(false);
+  const [pendingRoleChange, setPendingRoleChange] = useState<{
+    userId: string;
+    userName: string;
+    newRole: string;
+  } | null>(null);
+
   useEffect(() => {
     async function fetchUsers() {
       try {
@@ -37,13 +46,14 @@ export default function ManageUsersPage() {
         }
       } catch (error) {
         console.error(error);
-        toast.error('Failed to load registered users.');
+        toast.error('Failed to load registered users database');
       } finally {
         setLoading(false);
       }
     }
 
     if (session?.user?.role === 'admin') {
+      // Pushing loading trigger into a macro-task block to prevent react cascading render errors
       setTimeout(() => {
         setLoading(true);
       }, 0);
@@ -54,22 +64,31 @@ export default function ManageUsersPage() {
       }, 0);
     }
   }, [session, isPending]);
-  const handleRoleChange = async (
+
+  // Handler execution to update role mapping configurations
+  const handleRoleChange = (
     userId: string,
-    currentRole: string,
+    userName: string,
     newRole: string,
   ) => {
     if (userId === session?.user?.id) {
-      toast.error('You cannot change your own role.');
+      toast.error(
+        'Security Restriction: You cannot update your own master admin privileges!',
+      );
       return;
     }
+    setPendingRoleChange({ userId, userName, newRole });
+    setRoleModalOpen(true);
+  };
 
-    const confirmToggle = confirm(
-      `Are you sure you want to change the role to "${newRole.toUpperCase()}"?`,
-    );
-    if (!confirmToggle) return;
+  // Asynchronous fetch trigger to register role settings on MongoDB
+  const executeRoleChange = async () => {
+    if (!pendingRoleChange) return;
+    const { userId, newRole } = pendingRoleChange;
 
     setUpdatingId(userId);
+    setRoleModalOpen(false);
+
     try {
       const res = await fetch(`/api/users/${userId}/role`, {
         method: 'PUT',
@@ -81,25 +100,29 @@ export default function ManageUsersPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        toast.error(data.error || 'Role update failed');
+        toast.error(data.error || 'Role conversion pipeline failed');
         return;
       }
 
-      toast.success('User role successfully updated!');
+      toast.success('User privileges changed successfully!');
+      // Update client state parameters natively without forced window refetch routing
       setUsers(prev =>
         prev.map(u => (u.id === userId ? { ...u, role: newRole } : u)),
       );
     } catch {
-      toast.error('Something went wrong');
+      toast.error(
+        'Network error encountered while writing changes to database',
+      );
     } finally {
       setUpdatingId(null);
+      setPendingRoleChange(null);
     }
   };
 
   if (isPending)
     return (
       <p className="text-sm text-[var(--color-neutral)] p-10 text-center">
-        Loading...
+        Loading verification context...
       </p>
     );
 
@@ -107,7 +130,7 @@ export default function ManageUsersPage() {
     return (
       <div className="bg-white border border-black/5 rounded-2xl p-8 text-center">
         <p className="text-[var(--color-neutral)]">
-          This page is for admins only.
+          Access Denied: This directory requires master administrator access.
         </p>
       </div>
     );
@@ -146,11 +169,12 @@ export default function ManageUsersPage() {
       ) : users.length === 0 ? (
         <div className="bg-white border border-black/5 rounded-2xl p-12 text-center">
           <p className="text-[var(--color-neutral)]">
-            No users found.
+            No customer logs verified inside backend cluster nodes.
           </p>
         </div>
       ) : (
         <div className="bg-white border border-black/5 rounded-2xl overflow-hidden">
+          {/* Main Desktop Grid Headers */}
           <div className="hidden md:grid grid-cols-[50px_1fr_1fr_150px_140px] gap-4 px-5 py-3 border-b border-black/10 text-xs font-semibold text-[var(--color-neutral)] uppercase">
             <span>Avatar</span>
             <span>Name</span>
@@ -159,6 +183,7 @@ export default function ManageUsersPage() {
             <span>Joined Date</span>
           </div>
 
+          {/* User Entry Elements */}
           {users.map(user => (
             <div
               key={user.id}
@@ -180,7 +205,7 @@ export default function ManageUsersPage() {
                         updatingId === user.id || user.id === session?.user?.id
                       }
                       onChange={e =>
-                        handleRoleChange(user.id, user.role, e.target.value)
+                        handleRoleChange(user.id, user.name, e.target.value)
                       }
                       className="border border-black/10 rounded-lg px-2 py-1 text-xs outline-none bg-white"
                     >
@@ -195,6 +220,7 @@ export default function ManageUsersPage() {
                 {user.email}
               </span>
 
+              {/* Desktop Role Toggle Selector Column */}
               <div className="hidden md:block relative">
                 {updatingId === user.id ? (
                   <span className="flex items-center gap-1.5 text-xs text-[var(--color-neutral)] font-medium">
@@ -206,7 +232,7 @@ export default function ManageUsersPage() {
                     value={user.role || 'user'}
                     disabled={user.id === session?.user?.id}
                     onChange={e =>
-                      handleRoleChange(user.id, user.role, e.target.value)
+                      handleRoleChange(user.id, user.name, e.target.value)
                     }
                     data-cursor-hover
                     className={`text-xs font-semibold px-3 py-1.5 rounded-xl border border-black/10 outline-none cursor-pointer bg-white capitalize transition-all ${
@@ -227,6 +253,50 @@ export default function ManageUsersPage() {
               </span>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* REEZ Architectural Signature Control Role Change Confirmation Modal */}
+      {roleModalOpen && pendingRoleChange && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          {/* Smooth backdrop overlay filters */}
+          <div
+            className="absolute inset-0 bg-black/40 backdrop-blur-xs transition-opacity duration-300"
+            onClick={() => setRoleModalOpen(false)}
+          />
+
+          {/* Modal window container frame layout */}
+          <div className="relative bg-white border border-black/5 rounded-3xl p-6 max-w-sm w-full shadow-2xl flex flex-col items-center text-center gap-4 z-10 transition-all scale-100">
+            <div className="w-12 h-12 rounded-full bg-purple-50 flex items-center justify-center text-purple-600">
+              <AlertCircle size={22} strokeWidth={2} />
+            </div>
+
+            <div>
+              <h3 className="text-lg font-serif italic font-semibold mb-1">
+                Role Change Korbe?
+              </h3>
+              <p className="text-xs text-[var(--color-neutral)] leading-relaxed">
+                Tumi ki nishchit &quot;{pendingRoleChange.userName}&quot; er
+                role change kore &quot;{pendingRoleChange.newRole.toUpperCase()}
+                &quot; korte chao?
+              </p>
+            </div>
+
+            <div className="flex items-center gap-3 w-full mt-2">
+              <button
+                onClick={() => setRoleModalOpen(false)}
+                className="flex-1 border border-black/10 text-xs font-semibold py-3 rounded-full hover:bg-[var(--color-bg)] transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={executeRoleChange}
+                className="flex-1 bg-[var(--color-text)] text-white text-xs font-semibold py-3 rounded-full hover:bg-purple-600 hover:text-white transition-colors"
+              >
+                Yes, Change
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
