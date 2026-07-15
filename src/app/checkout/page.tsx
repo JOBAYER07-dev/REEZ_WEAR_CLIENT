@@ -10,18 +10,21 @@ import { toast } from 'sonner';
 export default function CheckoutPage() {
   const router = useRouter();
   const { cartItems, cartCount, clearCart } = useCart();
+
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('cod');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+
   const subtotal = cartItems.reduce(
     (total, item) => total + item.product.price * item.quantity,
     0,
   );
   const deliveryCharge = address.toLowerCase().includes('dhaka') ? 60 : 120;
   const totalAmount = subtotal + deliveryCharge;
+
   const handlePlaceOrder = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !phone || !address) {
@@ -31,10 +34,11 @@ export default function CheckoutPage() {
 
     setLoading(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/orders`, {
+      // 🎯 NEXT_PUBLIC_API_URL bade shorasori relative path use kora holo jate rewrite tunnel kaj kore
+      const res = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include', 
+        credentials: 'include',
         body: JSON.stringify({
           name,
           phone,
@@ -105,7 +109,6 @@ export default function CheckoutPage() {
       </Link>
       <h1 className="text-3xl font-serif italic mb-8">Checkout Details</h1>
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-10 items-start">
-        {/* Left Side: Shipping Form */}
         <form
           onSubmit={handlePlaceOrder}
           className="bg-white border border-black/5 rounded-2xl p-6 md:p-8 flex flex-col gap-5"
@@ -198,7 +201,6 @@ export default function CheckoutPage() {
               : `Confirm Order (${cartCount > 0 ? totalAmount : 0})`}
           </button>
         </form>
-        {/* Right Side: Order Summary */}
         <aside className="bg-white border border-black/5 rounded-2xl p-6 sticky top-24">
           <h2 className="text-lg font-semibold border-b border-black/5 pb-3 flex items-center gap-2">
             <ShoppingBag size={18} /> Order Summary
