@@ -56,7 +56,7 @@ export default function DashboardOverview() {
         </div>
       </div>
 
-      {/* 🎯 Recharts Integration: Beautiful Visual Analytics Graph */}
+      {/* Recharts Integration: Beautiful Visual Analytics Graph */}
       <div className="bg-white border border-black/5 rounded-2xl p-6 md:p-8">
         <div className="mb-4">
           <h3 className="font-semibold text-base text-[var(--color-text)]">
@@ -66,7 +66,6 @@ export default function DashboardOverview() {
             Monthly traffic conversion and platform interaction statistics.
           </p>
         </div>
-
         <div className="w-full h-64 mt-6">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart
@@ -119,8 +118,8 @@ export default function DashboardOverview() {
       {!isAdmin && (
         <div className="bg-[#F1F0EB] rounded-2xl p-6">
           <p className="text-sm text-[var(--color-neutral)]">
-            The option to add or manage products isn't visible because you don't
-            have admin access. You can still continue shopping.{' '}
+            The option to add or manage products isn&apos;t visible because you
+            don&apos;t have admin access. You can still continue shopping.{' '}
             <a href="/shop" className="underline font-medium text-black">
               Shop page
             </a>{' '}
