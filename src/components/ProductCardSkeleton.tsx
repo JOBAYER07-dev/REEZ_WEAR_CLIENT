@@ -1,7 +1,6 @@
 export default function ProductCardSkeleton() {
   return (
     <div className="bg-white border border-black/5 rounded-2xl overflow-hidden flex flex-col h-full animate-pulse">
-      {/* 🎯 সেম স্কয়ার অনুপাত */}
       <div className="aspect-square w-full bg-[#E8E6E0]" />
 
       <div className="p-4 flex flex-col gap-3">

@@ -18,7 +18,7 @@ export default function LoginPage() {
     setError('');
 
     if (!email || !password) {
-      setError('Email ar password dite hobe');
+      setError('Please enter both email and password');
       return;
     }
 
@@ -30,13 +30,12 @@ export default function LoginPage() {
     setLoading(false);
 
     if (authError) {
-      setError(authError.message || 'Login failed, abar try koro');
+      setError(authError.message || 'Login failed, please try again later');
       toast.error('Login failed');
       return;
     }
 
     toast.success('Login successful!');
-    // 🎯 ক্রস-ডোমেইন কুকি রেন্ডার হওয়ার পর ন্যাভবার আপডেট করতে ফুল রিফ্রেশ বাধ্যতামূলক
     window.location.href = '/';
   };
 
@@ -48,7 +47,6 @@ export default function LoginPage() {
   const handleGoogleLogin = async () => {
     await authClient.signIn.social({
       provider: 'google',
-      // 🎯 env variable এর ক্যাশিং ইস্যু এড়াতে সরাসরি লাইভ লিংক বসানো হলো
       callbackURL: 'https://reez-wear.vercel.app/',
     });
   };
@@ -61,7 +59,7 @@ export default function LoginPage() {
             REEZ
           </Link>
           <p className="text-[var(--color-neutral)] text-sm mt-2">
-            Login kore tomar account access koro
+            Login to access your account
           </p>
         </div>
 
@@ -112,7 +110,7 @@ export default function LoginPage() {
             data-cursor-hover
             className="w-full mt-3 border border-dashed border-black/20 rounded-full py-2.5 text-xs font-medium text-[var(--color-neutral)] hover:border-[var(--color-accent)] hover:text-black transition-colors"
           >
-            Demo Credentials Diye Try Koro
+            Try With Demo Account
           </button>
 
           <div className="flex items-center gap-3 my-6">
@@ -144,16 +142,16 @@ export default function LoginPage() {
                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
               />
             </svg>
-            Google diye Login koro
+            Continue with Google
           </button>
 
           <p className="text-center text-sm text-[var(--color-neutral)] mt-6">
-            Account nei?{' '}
+            Don't have an account?{' '}
             <Link
               href="/register"
               className="text-black font-medium underline underline-offset-4"
             >
-              Register koro
+              Sign Up
             </Link>
           </p>
         </div>

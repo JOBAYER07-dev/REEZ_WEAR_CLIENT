@@ -48,7 +48,6 @@ export default function DashboardLayout({
       adminOnly: false,
     },
     {
-      // 🎯 লিঙ্কটি পুরোপুরি সচল করা হলো
       href: '/dashboard/orders',
       label: 'My Orders',
       icon: Package,

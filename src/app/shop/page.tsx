@@ -54,7 +54,6 @@ function ShopContent() {
         if (minPrice) params.set('minPrice', minPrice);
         if (maxPrice) params.set('maxPrice', maxPrice);
 
-        // 🎯 রিলেটিভ পাথ ফিক্সড
         const res = await fetch(`/api/products?${params.toString()}`);
         const data = await res.json();
 

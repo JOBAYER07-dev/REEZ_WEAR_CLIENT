@@ -17,7 +17,6 @@ export default function ManageItemsPage() {
     async function fetchAll() {
       setLoading(true);
       try {
-        // 🎯 রিলেটিভ পাথ ফিক্সড
         const res = await fetch('/api/products?limit=100');
         const data = await res.json();
         setProducts(data.products);
@@ -31,26 +30,25 @@ export default function ManageItemsPage() {
   }, []);
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Ei product ta ki delete korte চাও? Eta ফিরিয়ে আনা যাবে না।'))
+    if (!confirm('Are you sure you want to delete this product? It cannot be undone.'))
       return;
 
     setDeletingId(id);
     try {
-      // 🎯 রিলেটিভ পাথ ফিক্সড
       const res = await fetch(`/api/products/${id}`, {
         method: 'DELETE',
         credentials: 'include',
       });
 
       if (!res.ok) {
-        toast.error('Delete korte problem hoyeche');
+        toast.error('Failed to delete product. Please try again later.');
         return;
       }
 
       setProducts(prev => prev.filter(p => p.id !== id));
-      toast.success('Product delete kora hoyeche');
+      toast.success('Product successfully deleted!');
     } catch {
-      toast.error('Kিছু ভুল hoyeche');
+      toast.error('Something went wrong, please try again later');
     } finally {
       setDeletingId(null);
     }
@@ -63,7 +61,7 @@ export default function ManageItemsPage() {
     return (
       <div className="bg-white border border-black/5 rounded-2xl p-8 text-center">
         <p className="text-[var(--color-neutral)]">
-          Ei page shudhু admin-er জন্য।
+          You are not authorized to access this page.
         </p>
       </div>
     );
@@ -108,12 +106,13 @@ export default function ManageItemsPage() {
       ) : products.length === 0 ? (
         <div className="bg-white border border-black/5 rounded-2xl p-12 text-center">
           <p className="text-[var(--color-neutral)]">
-            Ekhoনো kono product add kora hoyni।
+            You haven't added any products yet. Click the "Add New" button to
+            create your first product.
           </p>
         </div>
       ) : (
         <div className="bg-white border border-black/5 rounded-2xl overflow-hidden">
-          <div className="hidden md:grid grid-cols-[60px_1fr_120px_120px_100px_120px] gap-4 px-5 py-3 border-b border-black/10 text-xs font-semibold text-[var(--color-neutral)] uppercase">
+          <div className="hidden md:grid grid-cols-[60px_1fr_100px_100px_80px_160px] gap-4 px-5 py-3 border-b border-black/10 text-xs font-semibold text-[var(--color-neutral)] uppercase">
             <span>Image</span>
             <span>Title</span>
             <span>Category</span>
@@ -125,7 +124,7 @@ export default function ManageItemsPage() {
           {products.map(product => (
             <div
               key={product.id}
-              className="grid grid-cols-1 md:grid-cols-[60px_1fr_120px_120px_100px_120px] gap-3 md:gap-4 items-center px-5 py-4 border-b border-black/5 last:border-b-0"
+              className="grid grid-cols-1 md:grid-cols-[60px_1fr_100px_100px_80px_160px] gap-3 md:gap-4 items-center px-5 py-4 border-b border-black/5 last:border-b-0"
             >
               <div className="w-14 h-14 rounded-lg overflow-hidden bg-[#F1F0EB] shrink-0">
                 <img
@@ -149,11 +148,12 @@ export default function ManageItemsPage() {
               <span className="hidden md:block text-sm text-[var(--color-neutral)]">
                 {product.rating.toFixed(1)}
               </span>
-              <div className="flex items-center gap-3">
+
+              <div className="flex items-center gap-3 shrink-0">
                 <Link
                   href={`/product/${product.id}`}
                   data-cursor-hover
-                  className="flex items-center gap-1 text-xs font-medium text-[var(--color-neutral)] hover:text-black transition-colors"
+                  className="flex items-center gap-1 text-xs font-medium text-[var(--color-neutral)] hover:text-black transition-colors whitespace-nowrap"
                 >
                   <Eye size={14} />
                   View
@@ -161,7 +161,7 @@ export default function ManageItemsPage() {
                 <Link
                   href={`/items/edit/${product.id}`}
                   data-cursor-hover
-                  className="flex items-center gap-1 text-xs font-medium text-blue-500 hover:text-blue-700 transition-colors"
+                  className="flex items-center gap-1 text-xs font-medium text-blue-500 hover:text-blue-700 transition-colors whitespace-nowrap"
                 >
                   <Edit size={14} />
                   Edit
@@ -170,7 +170,7 @@ export default function ManageItemsPage() {
                   onClick={() => handleDelete(product.id)}
                   disabled={deletingId === product.id}
                   data-cursor-hover
-                  className="flex items-center gap-1 text-xs font-medium text-red-500 hover:text-red-700 transition-colors disabled:opacity-50"
+                  className="flex items-center gap-1 text-xs font-medium text-red-500 hover:text-red-700 transition-colors disabled:opacity-50 whitespace-nowrap"
                 >
                   <Trash2 size={14} />
                   {deletingId === product.id ? 'Deleting...' : 'Delete'}

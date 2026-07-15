@@ -64,7 +64,7 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     await authClient.signOut();
-    toast.success('Logout hoyeche');
+    toast.success('Logged out successfully');
     router.push('/');
     router.refresh();
   };
@@ -363,13 +363,13 @@ export default function Navbar() {
             <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-4">
               {cartItems.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full text-center text-[var(--color-neutral)] gap-2">
-                  <p className="text-sm">Tomar cart ekhono khali ache.</p>
+                  <p className="text-sm">Your cart is empty.</p>
                   <Link
                     href="/shop"
                     onClick={() => setCartOpen(false)}
                     className="text-xs font-semibold text-black underline underline-offset-4"
                   >
-                    Shop Now koro
+                    Shop Now
                   </Link>
                 </div>
               ) : (

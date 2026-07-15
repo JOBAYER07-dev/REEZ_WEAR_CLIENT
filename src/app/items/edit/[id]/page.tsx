@@ -37,7 +37,6 @@ export default function EditItemPage() {
   useEffect(() => {
     async function fetchProductDetails() {
       try {
-        // 🎯 রিলেটিভ পাথ ফিক্সড
         const res = await fetch(`/api/products/${id}`);
         if (!res.ok) throw new Error();
         const data = await res.json();
@@ -49,7 +48,7 @@ export default function EditItemPage() {
         setCategory(data.category);
         setImage(data.image || '');
       } catch {
-        toast.error('Product data load korte problem hoyeche');
+        toast.error('Failed to load product data');
       } finally {
         setFetching(false);
       }
@@ -68,7 +67,7 @@ export default function EditItemPage() {
     return (
       <div className="bg-white border border-black/5 rounded-2xl p-8 text-center">
         <p className="text-[var(--color-neutral)]">
-          Ei page shudhু admin-er জন্য।
+          You are not authorized to access this page.
         </p>
       </div>
     );
@@ -85,13 +84,12 @@ export default function EditItemPage() {
       !price ||
       !category
     ) {
-      setError('Shob required field pooron koro');
+      setError('Please fill in all required fields');
       return;
     }
 
     setLoading(true);
     try {
-      // 🎯 রিলেটিভ পাথ ফিক্সড
       const res = await fetch(`/api/products/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -109,7 +107,7 @@ export default function EditItemPage() {
       if (!res.ok) {
         const data = await res.json();
         setError(data.error || 'Update failed');
-        toast.error('Product update failed');
+        toast.error('Failed to update product. Please try again later.');
         setLoading(false);
         return;
       }
@@ -117,7 +115,7 @@ export default function EditItemPage() {
       toast.success('Product successfully updated!');
       router.push('/items/manage');
     } catch {
-      setError('Kিছু ভুল hoyeche, abar try koro');
+      setError('Something went wrong, please try again later');
       setLoading(false);
     }
   };

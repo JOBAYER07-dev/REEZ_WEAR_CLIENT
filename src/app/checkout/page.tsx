@@ -22,7 +22,7 @@ export default function CheckoutPage() {
     (total, item) => total + item.product.price * item.quantity,
     0,
   );
-  const deliveryCharge = address.toLowerCase().includes('dhaka') ? 60 : 120;
+  const deliveryCharge = address.toLowerCase().includes('dhaka') ? 70 : 130;
   const totalAmount = subtotal + deliveryCharge;
 
   const handlePlaceOrder = async (e: React.FormEvent) => {
@@ -84,8 +84,7 @@ export default function CheckoutPage() {
             Order Confirmed!
           </h1>
           <p className="text-sm text-[var(--color-neutral)] leading-relaxed">
-            Tomar order ti shofolvabe neya hoyeche. Amader support team shighroi
-            tomar shathe jogajog korbe.
+            Thank you for your order. We will contact you soon to confirm the
           </p>
           <button
             onClick={() => router.push('/shop')}
@@ -125,7 +124,7 @@ export default function CheckoutPage() {
               required
               value={name}
               onChange={e => setName(e.target.value)}
-              placeholder="Tomar naam likho"
+              placeholder="Enter your full name"
               className="w-full border border-black/10 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-[var(--color-accent)] bg-[var(--color-bg)]/35"
             />
           </div>
@@ -138,7 +137,7 @@ export default function CheckoutPage() {
               required
               value={phone}
               onChange={e => setPhone(e.target.value)}
-              placeholder="01XXXXXXXXX"
+              placeholder="Enter your phone number"
               className="w-full border border-black/10 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-[var(--color-accent)] bg-[var(--color-bg)]/35"
             />
           </div>
@@ -150,7 +149,7 @@ export default function CheckoutPage() {
               required
               value={address}
               onChange={e => setAddress(e.target.value)}
-              placeholder="House, Road, Area, City detail likho (Dhaka likhle delivery charge 60, baire 120)"
+              placeholder="Enter the house number, street, area, city, and postal code. Delivery charge is 70 BDT for Dhaka and 130 BDT for outside Dhaka."
               rows={3}
               className="w-full border border-black/10 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-[var(--color-accent)] resize-none bg-[var(--color-bg)]/35"
             />

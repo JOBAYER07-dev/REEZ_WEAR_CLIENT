@@ -41,7 +41,6 @@ export default function MyOrdersPage() {
     async function fetchMyOrders() {
       setLoading(true);
       try {
-        // 🎯 Absolute URL মুছে দিয়ে প্রক্সি রিলেটিভ পাথ ব্যবহার করা হলো যেন কুকি পাস হয়
         const res = await fetch('/api/orders/user/me', {
           credentials: 'include',
         });
@@ -51,7 +50,7 @@ export default function MyOrdersPage() {
         }
       } catch (error) {
         console.error(error);
-        toast.error('Order tracking data load korte problem hoyeche');
+        toast.error('Failed to fetch your orders. Please try again later.');
       } finally {
         setLoading(false);
       }
@@ -75,7 +74,7 @@ export default function MyOrdersPage() {
           <Package size={24} /> Track My Orders
         </h1>
         <p className="text-[var(--color-neutral)] text-sm">
-          Tomar place kora order gulor bortoman status ekhane dekhte parbe
+          You can track current status of your orders here.
         </p>
       </div>
 
@@ -91,7 +90,7 @@ export default function MyOrdersPage() {
       ) : orders.length === 0 ? (
         <div className="bg-white border border-black/5 rounded-2xl p-12 text-center text-[var(--color-neutral)]">
           <ShoppingBag size={40} className="mx-auto mb-3 opacity-30" />
-          Tumi ekhono kono order koro ni!
+          You haven't placed any orders yet.
         </div>
       ) : (
         <div className="flex flex-col gap-6">

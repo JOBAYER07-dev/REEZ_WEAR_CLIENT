@@ -43,7 +43,6 @@ export default function ManageOrdersPage() {
     async function fetchOrders() {
       setLoading(true);
       try {
-        // 🎯 প্রক্সি রিলেটিভ পাথ ব্যবহার করা হলো যেন সেশন কুকি ব্যাকএন্ডে পৌঁছায়
         const res = await fetch('/api/orders', {
           credentials: 'include',
         });
@@ -53,7 +52,7 @@ export default function ManageOrdersPage() {
         }
       } catch (error) {
         console.error('Failed to fetch orders:', error);
-        toast.error('Orders load korte problem hoyeche');
+        toast.error('Failed to fetch orders. Please try again later.');
       } finally {
         setLoading(false);
       }
@@ -66,7 +65,6 @@ export default function ManageOrdersPage() {
   const handleConfirmOrder = async (orderId: string) => {
     setUpdatingId(orderId);
     try {
-      // 🎯 এখানেও রিলেটিভ পাথ ফিক্স করা হলো
       const res = await fetch(`/api/orders/${orderId}/status`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -75,7 +73,7 @@ export default function ManageOrdersPage() {
       });
 
       if (!res.ok) {
-        toast.error('Order status update failed');
+        toast.error('Failed to update order status. Please try again later.');
         return;
       }
 
@@ -105,7 +103,7 @@ export default function ManageOrdersPage() {
         <div className="bg-white border border-black/5 rounded-2xl p-8 inline-flex flex-col items-center gap-3">
           <ShieldAlert size={40} className="text-red-500" />
           <p className="text-[var(--color-neutral)] text-sm">
-            Ei page shudhu admin-er jonno prodishito.
+            You are not authorized to access this page.
           </p>
         </div>
       </div>
@@ -144,7 +142,7 @@ export default function ManageOrdersPage() {
         </div>
       ) : orders.length === 0 ? (
         <div className="bg-white border border-black/5 rounded-2xl p-12 text-center text-[var(--color-neutral)]">
-          Ekhono kono order place kora hoyni.
+          You haven't received any orders yet.
         </div>
       ) : (
         <div className="flex flex-col gap-5">

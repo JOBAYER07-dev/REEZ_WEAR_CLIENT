@@ -49,14 +49,12 @@ export default function RegisterPage() {
     }
 
     toast.success('Account created successfully!');
-    // 🎯 অ্যাকাউন্ট খোলার পর সেশন কুকি রিড করার জন্য হোম পেজে ফুল রিফ্রেশ করা হলো
     window.location.href = '/';
   };
 
   const handleGoogleSignup = async () => {
     await authClient.signIn.social({
       provider: 'google',
-      // 🎯 env variable এর ক্যাশিং ইস্যু এড়াতে সরাসরি লাইভ লিংক বসানো হলো
       callbackURL: 'https://reez-wear.vercel.app/',
     });
   };
@@ -69,7 +67,7 @@ export default function RegisterPage() {
             REEZ
           </Link>
           <p className="text-[var(--color-neutral)] text-sm mt-2">
-            Notun account banao, shopping shuru koro
+            Create an account to get started
           </p>
         </div>
 
@@ -170,16 +168,16 @@ export default function RegisterPage() {
                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
               />
             </svg>
-            Google diye Register koro
+            Continue with Google
           </button>
 
           <p className="text-center text-sm text-[var(--color-neutral)] mt-6">
-            Already account ache?{' '}
+            Already have an account?{' '}
             <Link
               href="/login"
               className="text-black font-medium underline underline-offset-4"
             >
-              Login koro
+              Login
             </Link>
           </p>
         </div>

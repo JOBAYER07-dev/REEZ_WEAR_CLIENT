@@ -16,8 +16,6 @@ export default function ContactPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name || !form.email || !form.message) return;
-
-    // TODO: backend API e connect korte hobe (contact messages save korার jonno)
     setSubmitted(true);
     setForm({ name: '', email: '', message: '' });
   };

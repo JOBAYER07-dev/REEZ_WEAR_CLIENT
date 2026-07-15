@@ -16,8 +16,7 @@ export default function NotFound() {
       </h2>
 
       <p className="text-sm text-[var(--color-neutral)] max-w-md leading-relaxed mb-8">
-        Oops! Tomar khoja page ti khuje paowa jayni ba bodle feleche. Chinta
-        nei, niche thaka link diye abar shopping shuru koro.
+        The page you are looking for does not exist or has been removed. Please check the URL or return to the homepage.
       </p>
       <div className="flex flex-col sm:flex-row items-center gap-4">
         <Link

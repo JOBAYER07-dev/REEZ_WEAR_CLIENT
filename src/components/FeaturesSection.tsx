@@ -6,22 +6,22 @@ const features = [
   {
     icon: Truck,
     title: 'Fast Delivery',
-    desc: 'Dhaka-er vitor 24 ghontay ar shara Bangladesh e 2-3 diner moddhe delivery.',
+    desc: 'We offer fast and reliable delivery services, ensuring that your orders reach you in a timely manner.',
   },
   {
     icon: ShieldCheck,
     title: 'Authentic Quality',
-    desc: 'Prottek product hand-checked, premium fabric ar stitching guaranteed.',
+    desc: 'All products are 100% authentic and sourced directly from authorized distributors and brands.',
   },
   {
     icon: RefreshCw,
     title: 'Easy Exchange',
-    desc: 'Size na milleo chinta nei — 7 diner moddhe free exchange.',
+    desc: 'Easy exchanges are available within 7 days, provided the product is unused and has its original tags attached.',
   },
   {
     icon: Headset,
     title: '24/7 Support',
-    desc: 'Order niye je kono proshno thakle amader team shomoy shara Facebook/phone e ready.',
+    desc: 'Customer support always ready to help, 24/7, via chat or email.',
   },
 ];
 

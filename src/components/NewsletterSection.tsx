@@ -10,8 +10,6 @@ export default function NewsletterSection() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim()) return;
-
-    // TODO: backend API e connect korte hobe (newsletter collection e save)
     setSubmitted(true);
     setEmail('');
   };

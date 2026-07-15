@@ -26,9 +26,7 @@ export default function ProductDetailsPage() {
       setLoading(true);
       setNotFound(false);
       try {
-        // 🎯 রিলেটিভ পাথ ফিক্সড
         const res = await fetch(`/api/products/${id}`);
-
         if (res.status === 404) {
           if (!ignore) setNotFound(true);
           return;
@@ -37,8 +35,6 @@ export default function ProductDetailsPage() {
         const data: Product = await res.json();
         if (ignore) return;
         setProduct(data);
-
-        // 🎯 রিলেটিভ পাথ ফিক্সড
         const relatedRes = await fetch(
           `/api/products?category=${data.category}&limit=4`,
         );
@@ -84,17 +80,17 @@ export default function ProductDetailsPage() {
     return (
       <div className="max-w-7xl mx-auto px-6 lg:px-10 py-24 text-center">
         <h1 className="text-2xl font-semibold mb-3">
-          Product খুঁজে পাওয়া যায়নি
+          Product Not Found
         </h1>
         <p className="text-[var(--color-neutral)] mb-6">
-          Ei product ta হয়তো mucheদেওয়া হয়েছে, ba link ta ভুল।
+          The product you are looking for does not exist or has been removed.
         </p>
         <Link
           href="/shop"
           data-cursor-hover
           className="inline-block bg-[var(--color-text)] text-white rounded-full px-6 py-3 text-sm font-medium hover:bg-[var(--color-accent)] hover:text-black transition-colors"
         >
-          Shop-e Fere Jao
+          Back to Shop
         </Link>
       </div>
     );

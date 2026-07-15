@@ -20,7 +20,7 @@ export default function ProfilePage() {
     e.preventDefault();
 
     if (!name.trim()) {
-      toast.error('Naam khali rakha jाবে না');
+      toast.error('Name field cannot be empty');
       return;
     }
 
@@ -33,10 +33,10 @@ export default function ProfilePage() {
         return;
       }
 
-      toast.success('Profile update hoyeche');
+      toast.success('Profile update successful');
       refetch();
     } catch {
-      toast.error('Kিছু ভুল hoyeche');
+      toast.error('Something went wrong');
     } finally {
       setLoading(false);
     }
@@ -100,7 +100,7 @@ export default function ProfilePage() {
             data-cursor-hover
             className="w-full sm:w-auto sm:self-start bg-[var(--color-text)] text-white rounded-full px-6 py-2.5 text-sm font-medium hover:bg-[var(--color-accent)] hover:text-black transition-colors disabled:opacity-50 mt-2"
           >
-            {loading ? 'Save hocche...' : 'Save Changes'}
+            {loading ? 'Saving...' : 'Save Changes'}
           </button>
         </form>
       </div>

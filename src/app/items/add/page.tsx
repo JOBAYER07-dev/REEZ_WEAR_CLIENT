@@ -38,7 +38,7 @@ export default function AddItemPage() {
     return (
       <div className="bg-white border border-black/5 rounded-2xl p-8 text-center">
         <p className="text-[var(--color-neutral)]">
-          Ei page shudhু admin-er জন্য।
+          You are not authorized to access this page.
         </p>
       </div>
     );
@@ -55,18 +55,17 @@ export default function AddItemPage() {
       !price ||
       !category
     ) {
-      setError('Shob required field pooron koro');
+      setError('Please fill in all required fields');
       return;
     }
 
     if (Number(price) <= 0) {
-      setError('Price shothik hote hobe (0 er beshi)');
+      setError('Price must be a positive number');
       return;
     }
 
     setLoading(true);
     try {
-      // 🎯 রিলেটিভ পাথ ফিক্সড
       const res = await fetch('/api/products', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -84,16 +83,16 @@ export default function AddItemPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || 'Product add korte problem hoyeche');
-        toast.error('Product add failed');
+        setError(data.error || 'Something went wrong');
+        toast.error('Failed to add product. Please try again later.');
         setLoading(false);
         return;
       }
 
-      toast.success('Product successfully add hoyeche!');
+      toast.success('Product successfully added!');
       router.push('/items/manage');
     } catch {
-      setError('Kিছু ভুল hoyeche, abar try koro');
+      setError('Something went wrong, please try again later');
       setLoading(false);
     }
   };
