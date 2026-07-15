@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { toast } from 'sonner';
-import { Eye, Trash2, ArrowLeft, Edit } from 'lucide-react';
+import { Eye, Trash2, ArrowLeft, Edit, AlertTriangle } from 'lucide-react';
 import { authClient } from '@/app/lib/auth-client';
 import type { Product } from '@/types/product';
 
@@ -12,6 +12,8 @@ export default function ManageItemsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [productToDelete, setProductToDelete] = useState<Product | null>(null);
 
   useEffect(() => {
     async function fetchAll() {
@@ -29,10 +31,12 @@ export default function ManageItemsPage() {
     fetchAll();
   }, []);
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this product? It cannot be undone.'))
-      return;
+  const triggerDeleteConfirm = (product: Product) => {
+    setProductToDelete(product);
+    setDeleteModalOpen(true);
+  };
 
+  const handleDelete = async (id: string) => {
     setDeletingId(id);
     try {
       const res = await fetch(`/api/products/${id}`, {
@@ -41,16 +45,18 @@ export default function ManageItemsPage() {
       });
 
       if (!res.ok) {
-        toast.error('Failed to delete product. Please try again later.');
+        toast.error('Something went wrong. Please try again later.');
         return;
       }
 
       setProducts(prev => prev.filter(p => p.id !== id));
-      toast.success('Product successfully deleted!');
+      toast.success('Product deleted successfully.');
     } catch {
-      toast.error('Something went wrong, please try again later');
+      toast.error('Something went wrong. Please try again later.');
     } finally {
       setDeletingId(null);
+      setDeleteModalOpen(false);
+      setProductToDelete(null);
     }
   };
 
@@ -106,8 +112,8 @@ export default function ManageItemsPage() {
       ) : products.length === 0 ? (
         <div className="bg-white border border-black/5 rounded-2xl p-12 text-center">
           <p className="text-[var(--color-neutral)]">
-            You haven't added any products yet. Click the "Add New" button to
-            create your first product.
+            You haven't added any products yet. Add your first product to start
+            selling!
           </p>
         </div>
       ) : (
@@ -167,17 +173,62 @@ export default function ManageItemsPage() {
                   Edit
                 </Link>
                 <button
-                  onClick={() => handleDelete(product.id)}
+                  onClick={() => triggerDeleteConfirm(product)}
                   disabled={deletingId === product.id}
                   data-cursor-hover
                   className="flex items-center gap-1 text-xs font-medium text-red-500 hover:text-red-700 transition-colors disabled:opacity-50 whitespace-nowrap"
                 >
                   <Trash2 size={14} />
-                  {deletingId === product.id ? 'Deleting...' : 'Delete'}
+                  Delete
                 </button>
               </div>
             </div>
           ))}
+        </div>
+      )}
+      {deleteModalOpen && productToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div
+            className="absolute inset-0 bg-black/40 backdrop-blur-xs transition-opacity duration-300"
+            onClick={() => setDeleteModalOpen(false)}
+          />
+          <div className="relative bg-white border border-black/5 rounded-3xl p-6 max-w-sm w-full shadow-2xl flex flex-col items-center text-center gap-4 z-10 transition-all scale-100">
+            <div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center text-red-500">
+              <AlertTriangle size={22} strokeWidth={2} />
+            </div>
+
+            <div>
+              <h3 className="text-lg font-serif italic font-semibold mb-1">
+                You want to delete this product?
+              </h3>
+              <p className="text-xs text-[var(--color-neutral)] leading-relaxed">
+                Are you sure!{' '}
+                <span className="font-semibold text-black">
+                  "{productToDelete.title}"
+                </span>{' '}
+                Are you sure you want to delete this product? This action cannot
+                be undone.
+              </p>
+            </div>
+
+            <div className="flex items-center gap-3 w-full mt-2">
+              <button
+                onClick={() => setDeleteModalOpen(false)}
+                className="flex-1 border border-black/10 text-xs font-semibold py-3 rounded-full hover:bg-[var(--color-bg)] transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleDelete(productToDelete.id)}
+                disabled={deletingId === productToDelete.id}
+                className="flex-1 bg-[var(--color-text)] text-white text-xs font-semibold py-3 rounded-full hover:bg-red-600 hover:text-white transition-colors disabled:opacity-50"
+              >
+                {deletingId === productToDelete.id
+                  ? 'Deleting...'
+                  : 'Yes, Delete'}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
