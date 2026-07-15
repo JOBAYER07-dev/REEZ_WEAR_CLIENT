@@ -17,9 +17,8 @@ export default function ManageItemsPage() {
     async function fetchAll() {
       setLoading(true);
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/products?limit=100`,
-        );
+        // 🎯 রিলেটিভ পাথ ফিক্সড
+        const res = await fetch('/api/products?limit=100');
         const data = await res.json();
         setProducts(data.products);
       } catch (error) {
@@ -37,13 +36,11 @@ export default function ManageItemsPage() {
 
     setDeletingId(id);
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/products/${id}`,
-        {
-          method: 'DELETE',
-          credentials: 'include',
-        },
-      );
+      // 🎯 রিলেটিভ পাথ ফিক্সড
+      const res = await fetch(`/api/products/${id}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
 
       if (!res.ok) {
         toast.error('Delete korte problem hoyeche');
@@ -74,7 +71,6 @@ export default function ManageItemsPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-6 lg:px-10 py-10">
-      {/* ⬅5 Simple Back Arrow to Dashboard */}
       <Link
         href="/dashboard"
         data-cursor-hover
@@ -87,7 +83,7 @@ export default function ManageItemsPage() {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-serif italic mb-1">Manage Products</h1>
-          <p className="text-[var(--color-neutral)] text-sm">
+          <p className="text-[var(--color-neutral)] text-sm font-medium">
             Total {products.length} product{products.length !== 1 ? 's' : ''}
           </p>
         </div>
@@ -117,7 +113,6 @@ export default function ManageItemsPage() {
         </div>
       ) : (
         <div className="bg-white border border-black/5 rounded-2xl overflow-hidden">
-          {/* Table Header - Desktop only */}
           <div className="hidden md:grid grid-cols-[60px_1fr_120px_120px_100px_120px] gap-4 px-5 py-3 border-b border-black/10 text-xs font-semibold text-[var(--color-neutral)] uppercase">
             <span>Image</span>
             <span>Title</span>

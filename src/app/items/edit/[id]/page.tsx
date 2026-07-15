@@ -34,13 +34,11 @@ export default function EditItemPage() {
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
 
-  // ১. প্রোডাক্টের আগের ডেটা সার্ভার থেকে নিয়ে আসা
   useEffect(() => {
     async function fetchProductDetails() {
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/products/${id}`,
-        );
+        // 🎯 রিলেটিভ পাথ ফিক্সড
+        const res = await fetch(`/api/products/${id}`);
         if (!res.ok) throw new Error();
         const data = await res.json();
 
@@ -76,7 +74,6 @@ export default function EditItemPage() {
     );
   }
 
-  // ২. এডিট করা নতুন ডেটা সার্ভারে পাঠানো
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -94,22 +91,20 @@ export default function EditItemPage() {
 
     setLoading(true);
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/products/${id}`,
-        {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify({
-            title,
-            shortDescription,
-            fullDescription,
-            price: Number(price),
-            category,
-            image,
-          }),
-        },
-      );
+      // 🎯 রিলেটিভ পাথ ফিক্সড
+      const res = await fetch(`/api/products/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          title,
+          shortDescription,
+          fullDescription,
+          price: Number(price),
+          category,
+          image,
+        }),
+      });
 
       if (!res.ok) {
         const data = await res.json();
@@ -160,7 +155,6 @@ export default function EditItemPage() {
               className="w-full border border-black/10 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-[var(--color-accent)] bg-[var(--color-bg)]/35"
             />
           </div>
-
           <div>
             <label className="text-sm font-medium mb-1.5 block">
               Short Description *
@@ -172,7 +166,6 @@ export default function EditItemPage() {
               className="w-full border border-black/10 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-[var(--color-accent)] bg-[var(--color-bg)]/35"
             />
           </div>
-
           <div>
             <label className="text-sm font-medium mb-1.5 block">
               Full Description *
@@ -184,7 +177,6 @@ export default function EditItemPage() {
               className="w-full border border-black/10 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-[var(--color-accent)] resize-none bg-[var(--color-bg)]/35"
             />
           </div>
-
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
               <label className="text-sm font-medium mb-1.5 block">
@@ -197,7 +189,6 @@ export default function EditItemPage() {
                 className="w-full border border-black/10 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-[var(--color-accent)] bg-[var(--color-bg)]/35"
               />
             </div>
-
             <div>
               <label className="text-sm font-medium mb-1.5 block">
                 Category *
@@ -215,7 +206,6 @@ export default function EditItemPage() {
               </select>
             </div>
           </div>
-
           <div>
             <label className="text-sm font-medium mb-1.5 block">
               Image URL (Optional)
@@ -227,7 +217,6 @@ export default function EditItemPage() {
               className="w-full border border-black/10 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-[var(--color-accent)] bg-[var(--color-bg)]/35"
             />
           </div>
-
           <button
             type="submit"
             disabled={loading}

@@ -16,7 +16,6 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
 
-  // Search State
   const [searchVal, setSearchVal] = useState('');
   const [suggestions, setSuggestions] = useState<Product[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -30,17 +29,13 @@ export default function Navbar() {
     0,
   );
 
-  // 🎯 Real-time search suggestion fetch logic
   useEffect(() => {
-    if (!searchVal.trim()) {
-      setSuggestions([]);
-      return;
-    }
+    if (!searchVal.trim()) return;
 
     const delayDebounceFn = setTimeout(async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/products?search=${encodeURIComponent(searchVal.trim())}&limit=5`,
+          `/api/products?search=${encodeURIComponent(searchVal.trim())}&limit=5`,
         );
         const data = await res.json();
         if (data && Array.isArray(data.products)) {
@@ -49,12 +44,11 @@ export default function Navbar() {
       } catch (error) {
         console.error('Suggestions fetch failed:', error);
       }
-    }, 300); // 300ms Debounce taaki database-e beshi pressure na pore
+    }, 300);
 
     return () => clearTimeout(delayDebounceFn);
   }, [searchVal]);
 
-  // Dropdown-er baire click korle jeno suggestion list bondho hoye jay
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -89,7 +83,6 @@ export default function Navbar() {
     <>
       <nav className="sticky top-0 z-50 w-full bg-[var(--color-bg)]/95 backdrop-blur-sm border-b border-black/5">
         <div className="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between gap-4">
-          {/* Logo */}
           <Link
             href="/"
             className="text-2xl font-semibold tracking-tight shrink-0"
@@ -97,7 +90,6 @@ export default function Navbar() {
             REEZ
           </Link>
 
-          {/* 🎯 Search Bar - Desktop with Dynamic Floating Suggestions */}
           <div
             ref={suggestionRef}
             className="hidden md:block relative flex-1 max-w-md"
@@ -111,7 +103,11 @@ export default function Navbar() {
                 type="text"
                 value={searchVal}
                 onChange={e => {
-                  setSearchVal(e.target.value);
+                  const val = e.target.value;
+                  setSearchVal(val);
+                  if (!val.trim()) {
+                    setSuggestions([]);
+                  }
                   setShowSuggestions(true);
                 }}
                 onFocus={() => setShowSuggestions(true)}
@@ -120,7 +116,6 @@ export default function Navbar() {
               />
             </form>
 
-            {/* Floating Suggestions Dropdown */}
             {showSuggestions && suggestions.length > 0 && (
               <div className="absolute left-0 right-0 mt-2 bg-white border border-black/5 rounded-2xl shadow-xl overflow-hidden z-50 flex flex-col divide-y divide-black/5">
                 {suggestions.map(product => (
@@ -155,7 +150,6 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Nav Links - Desktop */}
           <div className="hidden lg:flex items-center gap-7 text-sm font-medium shrink-0">
             <Link
               href="/shop"
@@ -193,7 +187,6 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Right Icons */}
           <div className="flex items-center gap-4 shrink-0">
             <button
               aria-label="Wishlist"
@@ -202,7 +195,6 @@ export default function Navbar() {
             >
               <Heart size={20} />
             </button>
-
             <button
               onClick={() => setCartOpen(true)}
               aria-label="Cart"
@@ -245,7 +237,6 @@ export default function Navbar() {
               </>
             )}
 
-            {/* Mobile Menu Toggle */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
               className="lg:hidden"
@@ -257,7 +248,6 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Menu */}
         {mobileOpen && (
           <div className="lg:hidden bg-white border-t border-black/5 px-6 py-5 flex flex-col gap-4">
             <form
@@ -273,7 +263,6 @@ export default function Navbar() {
                 className="w-full bg-transparent outline-none px-3 text-sm"
               />
             </form>
-
             <Link
               href="/shop"
               onClick={() => setMobileOpen(false)}
@@ -352,14 +341,12 @@ export default function Navbar() {
         )}
       </nav>
 
-      {/* RIGHT SIDE CART DRAWER OVERLAY */}
       {cartOpen && (
         <div className="fixed inset-0 z-50 flex justify-end">
           <div
             className="absolute inset-0 bg-black/40 backdrop-blur-xs transition-opacity"
             onClick={() => setCartOpen(false)}
           />
-
           <div className="relative w-full max-w-md bg-white h-full shadow-xl flex flex-col z-10 animate-slide-in">
             <div className="p-6 border-b border-black/5 flex items-center justify-between">
               <h2 className="text-lg font-semibold flex items-center gap-2">
@@ -373,7 +360,6 @@ export default function Navbar() {
                 <X size={20} />
               </button>
             </div>
-
             <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-4">
               {cartItems.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full text-center text-[var(--color-neutral)] gap-2">
@@ -412,7 +398,6 @@ export default function Navbar() {
                 ))
               )}
             </div>
-
             {cartItems.length > 0 && (
               <div className="p-6 border-t border-black/5 bg-[var(--color-bg)]/30 flex flex-col gap-4">
                 <div className="flex items-center justify-between">

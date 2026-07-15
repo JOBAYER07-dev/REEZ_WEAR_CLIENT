@@ -22,7 +22,6 @@ const categories = [
 function ShopContent() {
   const searchParams = useSearchParams();
   
-  // 🎯 হোমপেজ বা অন্য পেজ থেকে ইউআরএল-এ আসা ফিল্টার রিড করা
   const initialCategory = searchParams.get('category') || 'all';
   const initialSearch = searchParams.get('search') || '';
 
@@ -52,14 +51,11 @@ function ShopContent() {
 
         if (category !== 'all') params.set('category', category);
         if (search) params.set('search', search);
-
-        // 🎯 ব্যাকএন্ড এপিআই-তে প্রাইস ফিল্টার পাঠানো হচ্ছে
         if (minPrice) params.set('minPrice', minPrice);
         if (maxPrice) params.set('maxPrice', maxPrice);
 
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/products?${params.toString()}`,
-        );
+        // 🎯 রিলেটিভ পাথ ফিক্সড
+        const res = await fetch(`/api/products?${params.toString()}`);
         const data = await res.json();
 
         if (!ignore) {
@@ -68,7 +64,6 @@ function ShopContent() {
         }
       } catch (error) {
         console.error('Failed to fetch products:', error);
-        // লাইন ৭১ পরিবর্তন করে এটি করো:
       } finally {
         if (!ignore) setLoading(false);
       }
@@ -82,12 +77,11 @@ function ShopContent() {
   }, [page, sort, category, search, minPrice, maxPrice]);
 
   const handleFilterChange = () => {
-    setPage(1); // ফিল্টার চেঞ্জ হলে সবসময় ১ম পেজে ফেরত নিয়ে যাবে
+    setPage(1);
   };
 
   return (
     <div className="max-w-7xl mx-auto px-6 lg:px-10 py-10">
-      {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl md:text-4xl font-serif italic mb-2">Explore Products</h1>
         <p className="text-[var(--color-neutral)] text-sm">
@@ -95,7 +89,6 @@ function ShopContent() {
         </p>
       </div>
 
-      {/* Search Bar */}
       <div className="flex items-center gap-3 mb-6">
         <div className="flex-1 flex items-center bg-white rounded-full px-4 py-3 border border-black/10">
           <Search size={18} className="text-[var(--color-neutral)]" />
@@ -121,10 +114,8 @@ function ShopContent() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-8">
-        {/* Sidebar Filters */}
         <aside className={`${showFilters ? 'block' : 'hidden'} lg:block`}>
           <div className="bg-white rounded-2xl border border-black/5 p-5 sticky top-24">
-            {/* Category Filter */}
             <div className="mb-6">
               <h3 className="text-sm font-semibold mb-3">Category</h3>
               <div className="flex flex-col gap-2">
@@ -148,7 +139,6 @@ function ShopContent() {
               </div>
             </div>
 
-            {/* Price Filter */}
             <div className="mb-6">
               <h3 className="text-sm font-semibold mb-3">Price Range</h3>
               <div className="flex items-center gap-2">
@@ -176,7 +166,6 @@ function ShopContent() {
               </div>
             </div>
 
-            {/* Sort */}
             <div>
               <h3 className="text-sm font-semibold mb-3">Sort By</h3>
               <select
@@ -195,7 +184,6 @@ function ShopContent() {
           </div>
         </aside>
 
-        {/* Product Grid */}
         <div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
             {loading ? (
@@ -213,7 +201,6 @@ function ShopContent() {
             )}
           </div>
 
-          {/* Pagination */}
           {!loading && products.length > 0 && (
             <div className="flex items-center justify-center gap-2 mt-10">
               <button
@@ -243,7 +230,6 @@ function ShopContent() {
   );
 }
 
-// 🎯 Next.js App Router এর নিয়ম মেনে Suspense দিয়ে র্যাপ করা হলো
 export default function ShopPage() {
   return (
     <Suspense fallback={<div className="text-center py-20 text-sm text-[var(--color-neutral)]">Loading Shop Content...</div>}>

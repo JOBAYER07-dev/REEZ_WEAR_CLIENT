@@ -41,12 +41,10 @@ export default function MyOrdersPage() {
     async function fetchMyOrders() {
       setLoading(true);
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/orders/user/me`,
-          {
-            credentials: 'include',
-          },
-        );
+        // 🎯 Absolute URL মুছে দিয়ে প্রক্সি রিলেটিভ পাথ ব্যবহার করা হলো যেন কুকি পাস হয়
+        const res = await fetch('/api/orders/user/me', {
+          credentials: 'include',
+        });
         const data = await res.json();
         if (data.orders) {
           setOrders(data.orders);
@@ -102,7 +100,6 @@ export default function MyOrdersPage() {
               key={order.id}
               className="bg-white border border-black/5 rounded-2xl p-5 md:p-6 hover:shadow-sm transition-all flex flex-col gap-5"
             >
-              {/* ওপরের মেটা ডাটা পার্ট */}
               <div className="flex flex-wrap items-center justify-between gap-3 border-b border-black/5 pb-4">
                 <div className="space-y-0.5">
                   <p className="text-xs text-[var(--color-neutral)]">
@@ -117,7 +114,6 @@ export default function MyOrdersPage() {
                   </p>
                 </div>
 
-                {/* 🎯 ডাইনামিক স্ট্যাটাস ট্র্যাকার ব্যাজ */}
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-[var(--color-neutral)] font-medium">
                     Status:
@@ -139,9 +135,7 @@ export default function MyOrdersPage() {
                 </div>
               </div>
 
-              {/* মাঝখানের কন্টেন্ট: প্রোডাক্টস এবং ট্র্যাকিং বার */}
               <div className="grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-6 items-center">
-                {/* প্রোডাক্টের তালিকা */}
                 <div className="space-y-2">
                   <p className="text-xs font-semibold uppercase text-[var(--color-neutral)] tracking-wider">
                     Items Ordered
@@ -167,7 +161,6 @@ export default function MyOrdersPage() {
                   </p>
                 </div>
 
-                {/* মোট টাকা ও ভিজ্যুয়াল ট্র্যাকিং স্ট্যাটাস */}
                 <div className="bg-[var(--color-bg)]/35 border border-black/5 p-4 rounded-xl flex flex-col justify-between md:items-end text-left md:text-right">
                   <div>
                     <p className="text-xs text-[var(--color-neutral)]">
@@ -178,7 +171,6 @@ export default function MyOrdersPage() {
                     </p>
                   </div>
 
-                  {/* ট্র্যাকিং প্রগ্রেস বার ভিজ্যুয়াল ইফেক্ট */}
                   <div className="w-full mt-3 space-y-1">
                     <div className="h-1.5 bg-gray-100 rounded-full w-full overflow-hidden">
                       <div

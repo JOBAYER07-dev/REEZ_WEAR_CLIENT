@@ -66,22 +66,20 @@ export default function AddItemPage() {
 
     setLoading(true);
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/products`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify({
-            title,
-            shortDescription,
-            fullDescription,
-            price: Number(price),
-            category,
-            image,
-          }),
-        },
-      );
+      // 🎯 রিলেটিভ পাথ ফিক্সড
+      const res = await fetch('/api/products', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          title,
+          shortDescription,
+          fullDescription,
+          price: Number(price),
+          category,
+          image,
+        }),
+      });
 
       const data = await res.json();
 
@@ -102,7 +100,6 @@ export default function AddItemPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-10">
-      {/* ⬅️ Simple Back Arrow to Dashboard */}
       <Link
         href="/dashboard"
         data-cursor-hover
@@ -135,7 +132,6 @@ export default function AddItemPage() {
               className="w-full border border-black/10 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-[var(--color-accent)] bg-[var(--color-bg)]/35"
             />
           </div>
-
           <div>
             <label className="text-sm font-medium mb-1.5 block">
               Short Description *
@@ -148,7 +144,6 @@ export default function AddItemPage() {
               className="w-full border border-black/10 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-[var(--color-accent)] bg-[var(--color-bg)]/35"
             />
           </div>
-
           <div>
             <label className="text-sm font-medium mb-1.5 block">
               Full Description *
@@ -161,7 +156,6 @@ export default function AddItemPage() {
               className="w-full border border-black/10 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-[var(--color-accent)] resize-none bg-[var(--color-bg)]/35"
             />
           </div>
-
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
               <label className="text-sm font-medium mb-1.5 block">
@@ -175,7 +169,6 @@ export default function AddItemPage() {
                 className="w-full border border-black/10 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-[var(--color-accent)] bg-[var(--color-bg)]/35"
               />
             </div>
-
             <div>
               <label className="text-sm font-medium mb-1.5 block">
                 Category *
@@ -193,7 +186,6 @@ export default function AddItemPage() {
               </select>
             </div>
           </div>
-
           <div>
             <label className="text-sm font-medium mb-1.5 block">
               Image URL (Optional)
@@ -206,7 +198,6 @@ export default function AddItemPage() {
               className="w-full border border-black/10 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-[var(--color-accent)] bg-[var(--color-bg)]/35"
             />
           </div>
-
           <button
             type="submit"
             disabled={loading}

@@ -39,17 +39,14 @@ export default function ManageOrdersPage() {
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
 
-  // 🎯 সব অর্ডার লোড করার লজিক
   useEffect(() => {
     async function fetchOrders() {
       setLoading(true);
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/orders`,
-          {
-            credentials: 'include',
-          },
-        );
+        // 🎯 প্রক্সি রিলেটিভ পাথ ব্যবহার করা হলো যেন সেশন কুকি ব্যাকএন্ডে পৌঁছায়
+        const res = await fetch('/api/orders', {
+          credentials: 'include',
+        });
         const data = await res.json();
         if (data.orders) {
           setOrders(data.orders);
@@ -66,26 +63,22 @@ export default function ManageOrdersPage() {
     }
   }, [session]);
 
-  // 🎯 ওয়ান-ক্লিক অর্ডার কনফার্ম করার লজিক
   const handleConfirmOrder = async (orderId: string) => {
     setUpdatingId(orderId);
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/orders/${orderId}/status`,
-        {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify({ status: 'confirmed' }),
-        },
-      );
+      // 🎯 এখানেও রিলেটিভ পাথ ফিক্স করা হলো
+      const res = await fetch(`/api/orders/${orderId}/status`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ status: 'confirmed' }),
+      });
 
       if (!res.ok) {
         toast.error('Order status update failed');
         return;
       }
 
-      // লোকাল স্টেট আপডেট করা যাতে রিফ্রেশ ছাড়াই বাটন গায়েব হয়ে যায়
       setOrders(prev =>
         prev.map(order =>
           order.id === orderId ? { ...order, status: 'confirmed' } : order,
@@ -160,7 +153,6 @@ export default function ManageOrdersPage() {
               key={order.id}
               className="bg-white border border-black/5 rounded-2xl p-6 flex flex-col md:flex-row justify-between gap-6 hover:shadow-sm transition-all"
             >
-              {/* কাস্টমার ও ডেলিভারি ইনফো */}
               <div className="flex-1 space-y-2">
                 <div className="flex items-center gap-3">
                   <h3 className="font-semibold text-base">{order.name}</h3>
@@ -176,7 +168,7 @@ export default function ManageOrdersPage() {
                 </div>
                 <p className="text-xs text-[var(--color-neutral)]">
                   <span className="font-medium text-black">Phone:</span>{' '}
-                  {order.phone} |{' '}
+                  {order.phone} | silent{' '}
                   <span className="font-medium text-black">Payment:</span>{' '}
                   {order.paymentMethod.toUpperCase()}
                 </p>
@@ -185,7 +177,6 @@ export default function ManageOrdersPage() {
                   {order.address}
                 </p>
 
-                {/* অর্ডারের প্রোডাক্ট লিস্ট */}
                 <div className="mt-3 bg-[var(--color-bg)]/50 p-3 rounded-xl border border-black/5">
                   <p className="text-xs font-semibold mb-1.5 uppercase text-[var(--color-neutral)]">
                     Ordered Items:
@@ -200,6 +191,7 @@ export default function ManageOrdersPage() {
                           {item.title}{' '}
                           <span className="text-[var(--color-neutral)]">
                             x{item.quantity}
+                            Espn
                           </span>
                         </span>
                         <span className="font-medium">
@@ -211,7 +203,6 @@ export default function ManageOrdersPage() {
                 </div>
               </div>
 
-              {/* প্রাইস এবং অ্যাকশন বাটন */}
               <div className="flex flex-col md:items-end justify-between shrink-0 gap-3 min-w-[140px]">
                 <div className="text-left md:text-right">
                   <p className="text-xs text-[var(--color-neutral)]">
@@ -226,7 +217,6 @@ export default function ManageOrdersPage() {
                   </p>
                 </div>
 
-                {/* স্ট্যাটাস পেন্ডিং থাকলে অ্যাডমিন ওয়ান-ক্লিকে কনফার্ম করতে পারবে */}
                 {order.status === 'pending' ? (
                   <button
                     onClick={() => handleConfirmOrder(order.id)}

@@ -48,11 +48,11 @@ export default function DashboardLayout({
       adminOnly: false,
     },
     {
-      // 🎯 কাস্টমারের নিজের অর্ডার ট্র্যাকিং করার লিংক
+      // 🎯 লিঙ্কটি পুরোপুরি সচল করা হলো
       href: '/dashboard/orders',
       label: 'My Orders',
-      icon: Package, // (Package আইকনটি ওপরে import করে নিও)
-      adminOnly: false, // সাধারণ ইউজার এবং অ্যাডমিন দুজনেই দেখতে পারবে
+      icon: Package,
+      adminOnly: false,
     },
     {
       href: '/items/add',
@@ -83,7 +83,6 @@ export default function DashboardLayout({
   return (
     <div className="max-w-7xl mx-auto px-6 lg:px-10 py-10">
       <div className="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-8">
-        {/* Sidebar */}
         <aside>
           <div className="bg-white border border-black/5 rounded-2xl p-5 sticky top-24">
             <div className="flex items-center gap-3 mb-6 pb-6 border-b border-black/10">
@@ -122,7 +121,6 @@ export default function DashboardLayout({
           </div>
         </aside>
 
-        {/* Content */}
         <div>{children}</div>
       </div>
     </div>

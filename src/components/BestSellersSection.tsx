@@ -13,9 +13,8 @@ export default function BestSellersSection() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/products?sort=newest&limit=4`,
-        );
+      
+        const res = await fetch('/api/products?sort=newest&limit=4');
         const data = await res.json();
         setProducts(data.products);
       } catch (error) {

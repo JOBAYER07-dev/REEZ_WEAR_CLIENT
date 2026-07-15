@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { useCart } from '@/context/CartContext'; // 🎯 কার্ট হুক ইম্পোর্ট করা হয়েছে
+import { useCart } from '@/context/CartContext';
 import Link from 'next/link';
 import { Star, ShoppingCart, Heart, Tag } from 'lucide-react';
 import ProductCard from '@/components/ProductCard';
@@ -12,7 +12,7 @@ import type { Product } from '@/types/product';
 export default function ProductDetailsPage() {
   const params = useParams();
   const id = params.id as string;
-  const { addToCart } = useCart(); // 🎯 কার্ট অ্যাড ফাংশন কল করা হয়েছে
+  const { addToCart } = useCart();
 
   const [product, setProduct] = useState<Product | null>(null);
   const [related, setRelated] = useState<Product[]>([]);
@@ -26,9 +26,8 @@ export default function ProductDetailsPage() {
       setLoading(true);
       setNotFound(false);
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/products/${id}`,
-        );
+        // 🎯 রিলেটিভ পাথ ফিক্সড
+        const res = await fetch(`/api/products/${id}`);
 
         if (res.status === 404) {
           if (!ignore) setNotFound(true);
@@ -39,9 +38,9 @@ export default function ProductDetailsPage() {
         if (ignore) return;
         setProduct(data);
 
-        // Related products — same category theke, current product bad diye
+        // 🎯 রিলেটিভ পাথ ফিক্সড
         const relatedRes = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/products?category=${data.category}&limit=4`,
+          `/api/products?category=${data.category}&limit=4`,
         );
         const relatedData = await relatedRes.json();
         if (!ignore) {
@@ -103,7 +102,6 @@ export default function ProductDetailsPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-6 lg:px-10 py-12">
-      {/* Breadcrumb */}
       <div className="text-sm text-[var(--color-neutral)] mb-8">
         <Link href="/" className="hover:text-black">
           Home
@@ -116,9 +114,7 @@ export default function ProductDetailsPage() {
         <span className="text-black">{product.title}</span>
       </div>
 
-      {/* Main Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-16">
-        {/* Image */}
         <div className="aspect-square bg-[#F1F0EB] rounded-2xl overflow-hidden">
           <img
             src={product.image}
@@ -127,7 +123,6 @@ export default function ProductDetailsPage() {
           />
         </div>
 
-        {/* Info */}
         <div className="flex flex-col">
           <span className="text-xs font-medium uppercase tracking-wider text-[var(--color-neutral)] mb-2">
             {product.category.replace('-', ' ')}
@@ -135,7 +130,6 @@ export default function ProductDetailsPage() {
           <h1 className="text-3xl md:text-4xl font-serif italic mb-3">
             {product.title}
           </h1>
-
           <div className="flex items-center gap-2 mb-5">
             <div className="flex items-center gap-1 text-sm">
               <Star
@@ -149,15 +143,12 @@ export default function ProductDetailsPage() {
               · Verified Product
             </span>
           </div>
-
           <p className="text-2xl font-semibold mb-6">৳{product.price}</p>
-
           <p className="text-[var(--color-neutral)] text-sm leading-relaxed mb-8">
             {product.shortDescription}
           </p>
 
           <div className="flex items-center gap-3 mb-8">
-            {/* 🎯 onClick ইভেন্টেaddToCart যুক্ত করা হয়েছে */}
             <button
               onClick={() => addToCart(product)}
               data-cursor-hover
@@ -175,7 +166,6 @@ export default function ProductDetailsPage() {
             </button>
           </div>
 
-          {/* Key Info / Specifications */}
           <div className="border-t border-black/10 pt-6">
             <h3 className="text-sm font-semibold mb-4 flex items-center gap-2">
               <Tag size={16} />
@@ -186,10 +176,8 @@ export default function ProductDetailsPage() {
               <dd className="font-medium capitalize">
                 {product.category.replace('-', ' ')}
               </dd>
-
               <dt className="text-[var(--color-neutral)]">Price</dt>
               <dd className="font-medium">৳{product.price}</dd>
-
               <dt className="text-[var(--color-neutral)]">Rating</dt>
               <dd className="font-medium">{product.rating.toFixed(1)} / 5.0</dd>
             </dl>
@@ -197,7 +185,6 @@ export default function ProductDetailsPage() {
         </div>
       </div>
 
-      {/* Description / Overview */}
       <div className="mb-16 max-w-3xl">
         <h2 className="text-2xl font-serif italic mb-4">Description</h2>
         <p className="text-[var(--color-neutral)] leading-relaxed">
@@ -205,7 +192,6 @@ export default function ProductDetailsPage() {
         </p>
       </div>
 
-      {/* Reviews / Rating */}
       <div className="mb-16 max-w-3xl">
         <h2 className="text-2xl font-serif italic mb-4">Ratings</h2>
         <div className="bg-white border border-black/5 rounded-2xl p-6 flex items-center gap-6">
@@ -234,18 +220,15 @@ export default function ProductDetailsPage() {
         </div>
       </div>
 
-      {/* Related Products */}
       {related.length > 0 && (
         <div>
           <h2 className="text-2xl md:text-3xl font-serif italic mb-6">
             You May Also Like
           </h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-            {loading
-              ? Array.from({ length: 4 }).map((_, i) => (
-                  <ProductCardSkeleton key={i} />
-                ))
-              : related.map(p => <ProductCard key={p.id} product={p} />)}
+            {related.map(p => (
+              <ProductCard key={p.id} product={p} />
+            ))}
           </div>
         </div>
       )}
